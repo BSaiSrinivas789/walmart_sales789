@@ -51,36 +51,40 @@ This project is an end-to-end data analysis solution designed to extract critica
    - **Table Creation**: Set up tables in MySQL using Python SQLAlchemy to automate table creation and data insertion.
    - **Verification**: Run initial SQL queries to confirm that the data has been loaded accurately.
 
-### 9. SQL Analysis: Complex Queries and Business Problem Solving
-   - **Business Problem-Solving**: Write and execute complex SQL queries to answer critical business questions, such as:
- - 1. Highest-Rated Category in Each Branch
-     '''sql
-SELECT branch, category, avg_rating
-FROM (
-    SELECT 
-        branch,
-        category,
-        AVG(rating) AS avg_rating,
-        RANK() OVER(PARTITION BY branch ORDER BY AVG(rating) DESC) AS rank
-    FROM walmart
-    GROUP BY branch, category
-) AS ranked
-WHERE rank = 1;
-'''
- - 2. Busiest Day in Each Branch Based on Transactions
-'''
-SELECT branch, day_name, no_transactions
-FROM (
-    SELECT 
-        branch,
-        DAYNAME(STR_TO_DATE(date, '%d/%m/%Y')) AS day_name,
-        COUNT(*) AS no_transactions,
-        RANK() OVER(PARTITION BY branch ORDER BY COUNT(*) DESC) AS rank
-    FROM walmart
-    GROUP BY branch, day_name
-) AS ranked
-WHERE rank = 1;
-'''
+9. SQL Analysis: Complex Queries and Business Problem Solving
+
+- **Business Problem-Solving:** Write and execute complex SQL queries to answer critical business questions, such as:
+
+    i. Highest-Rated Category in Each Branch:
+    ```sql
+    SELECT branch, category, avg_rating
+    FROM (
+        SELECT 
+            branch,
+            category,
+            AVG(rating) AS avg_rating,
+            RANK() OVER(PARTITION BY branch ORDER BY AVG(rating) DESC) AS rank
+        FROM walmart
+        GROUP BY branch, category
+    ) AS ranked
+    WHERE rank = 1;
+    ```
+
+    ii. Busiest Day in Each Branch Based on Transactions:
+    ```sql
+    SELECT branch, day_name, no_transactions
+    FROM (
+        SELECT 
+            branch,
+            DAYNAME(STR_TO_DATE(date, '%d/%m/%Y')) AS day_name,
+            COUNT(*) AS no_transactions,
+            RANK() OVER(PARTITION BY branch ORDER BY COUNT(*) DESC) AS rank
+        FROM walmart
+        GROUP BY branch, day_name
+    ) AS ranked
+    WHERE rank = 1;
+    ```
+
      - Sales performance by time, city, and payment method.
      - Analyzing peak sales periods and customer buying patterns.
      - Profit margin analysis by branch and category.
