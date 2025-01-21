@@ -53,8 +53,8 @@ This project is an end-to-end data analysis solution designed to extract critica
 
 ### 9. SQL Analysis: Complex Queries and Business Problem Solving
    - **Business Problem-Solving**: Write and execute complex SQL queries to answer critical business questions, such as:
-     -- 1. Highest-Rated Category in Each Branch
-     '''sq
+ - 1. Highest-Rated Category in Each Branch
+     '''sql
 SELECT branch, category, avg_rating
 FROM (
     SELECT 
@@ -67,8 +67,8 @@ FROM (
 ) AS ranked
 WHERE rank = 1;
 '''
-     - 2. Busiest Day in Each Branch Based on Transactions
-'''sq
+ - 2. Busiest Day in Each Branch Based on Transactions
+'''
 SELECT branch, day_name, no_transactions
 FROM (
     SELECT 
