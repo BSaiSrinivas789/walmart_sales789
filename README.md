@@ -55,7 +55,7 @@ This project is an end-to-end data analysis solution designed to extract critica
 
 - **Business Problem-Solving:** Write and execute complex SQL queries to answer critical business questions, such as:
 
-    i. Highest-Rated Category in Each Branch:
+    1. Highest-Rated Category in Each Branch:
     ```sql
     SELECT branch, category, avg_rating
     FROM (
@@ -70,7 +70,7 @@ This project is an end-to-end data analysis solution designed to extract critica
     WHERE rank = 1;
     ```
 
-    ii. Busiest Day in Each Branch Based on Transactions:
+    2. Busiest Day in Each Branch Based on Transactions:
     ```sql
     SELECT branch, day_name, no_transactions
     FROM (
@@ -85,9 +85,68 @@ This project is an end-to-end data analysis solution designed to extract critica
     WHERE rank = 1;
     ```
 
-     - Sales performance by time, city, and payment method.
-     - Analyzing peak sales periods and customer buying patterns.
-     - Profit margin analysis by branch and category.
+3 Total Quantity Sold Per Payment Method (Q4):
+    ```sql
+    SELECT 
+        payment_method,
+        SUM(quantity) AS no_qty_sold
+    FROM walmart
+    GROUP BY payment_method;
+    ```
+
+4. Average, Minimum, and Maximum Ratings for Categories by City (Q5):
+    ```sql
+    SELECT 
+        city,
+        category,
+        MIN(rating) AS min_rating,
+        MAX(rating) AS max_rating,
+        AVG(rating) AS avg_rating
+    FROM walmart
+    GROUP BY city, category;
+    ```
+
+5. Total Profit for Each Category (Q6):
+    ```sql
+    SELECT 
+        category,
+        SUM(unit_price * quantity * profit_margin) AS total_profit
+    FROM walmart
+    GROUP BY category
+    ORDER BY total_profit DESC;
+    ```
+
+6. Most Common Payment Method for Each Branch (Q7):
+    ```sql
+    WITH cte AS (
+        SELECT 
+            branch,
+            payment_method,
+            COUNT(*) AS total_trans,
+            RANK() OVER(PARTITION BY branch ORDER BY COUNT(*) DESC) AS rank
+        FROM walmart
+        GROUP BY branch, payment_method
+    )
+    SELECT branch, payment_method AS preferred_payment_method
+    FROM cte
+    WHERE rank = 1;
+    ```
+
+7. Categorize Sales into Morning, Afternoon, and Evening Shifts (Q8):
+    ```sql
+    SELECT
+        branch,
+        CASE 
+            WHEN HOUR(TIME(time)) < 12 THEN 'Morning'
+            WHEN HOUR(TIME(time)) BETWEEN 12 AND 17 THEN 'Afternoon'
+            ELSE 'Evening'
+        END AS shift,
+        COUNT(*) AS num_invoices
+    FROM walmart
+    GROUP BY branch, shift
+    ORDER BY branch, num_invoices DESC;
+    ```
+
    - **Documentation**: Keep clear notes of each query's objective, approach, and results.
 
 ### 10. Project Publishing and Documentation
